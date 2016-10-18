@@ -2,7 +2,7 @@
   "name": "infinite",
   "version": "0.0.0",
   "description": "A efficient infinite module for angular.js",
-  "main": "index.js",
+  "main": "./src/infinite",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
