@@ -86,7 +86,6 @@
                 });
                 return ((results.length && !!id) || (!!id && !!instance_binding && !!instance_handler) ? function() {
                     if (!results.length) {
-
                         var instance = new Infinite();
 
                         instance.id = !!id ? id : DEFAULT_ID + total_defaults;
@@ -100,16 +99,17 @@
                         instance._handler();
                         return instance;
                     } else {
+                        results[0]._handler();
                         return results[0];
                     }
-                }() : !function () {
-                    throw new InsufficientParameterException("infinite.get");
-                }())
+                }() : !function (args) {
+                    throw new InsufficientParameterException({"method": "infinite.get", "params": args});
+                }(arguments))
             }
 
             function InsufficientParameterException(value) {
                 this.value = value;
-                this.message = "does not conform to the expected format for a zip code";
+                this.message = "Do not conform to the required parameters.";
                 this.toString = function() {
                     return this.value + this.message;
                 };
@@ -117,7 +117,8 @@
 
             function destroy(id) {
                 for (var i = 0; i < instances.length; i++) {
-                    instances[i].id === id ? instances.splice(i, 1).bound.removeEventListener("scroll", this.handler) : null;
+                    var destroyedInstance = instances[i].id === id ? instances.splice(i, 1)[0] : null;
+                    !!destroyedInstance ? destroyedInstance.bound.removeEventListener("scroll", this.handler) : null;
                 }
             }
 
