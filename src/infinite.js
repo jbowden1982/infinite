@@ -41,22 +41,21 @@
                 },
 
                 _offset: function () {
-                    return this.bound.innerHeight;
+                    return !!this.bound.innerHeight ? this.bound.innerHeight : this.bound.offsetHeight;
                 },
 
                 bind: function(binding) {
-                    this.unbind();
 
                     this.bound = !!binding ? binding : $window;
 
-                    this.bound.addEventListener("scroll", this._handler);
+                    this.bound.addEventListener("scroll", this._handler.bind(this));
                 },
 
                 _ready: function() {
                     this.busy = false;
 
                     return (this.done || this.pause || !this.bound) ? false : !function() {
-                        return (this._offset() > this._offsetDocumentEnd(this._documentHeight())) ? this.fire(this.handler) : false;
+                        return (this._offset() < this._offsetDocumentEnd(this._documentHeight())) ? this.fire(this.handler) : false;
                     }.bind(this)();
                 },
 
@@ -67,39 +66,45 @@
                 fire: function (cb) {
                     this.busy = true;
 
-                    return !!cb ? !!cb.apply(this, [this._ready, this._done]) : false;
+                    return !!cb ? !function () {
+                        cb(this._ready, this._done)
+                        return true;
+                    }.bind(this)() : false;
                 },
 
                 _handler: function () {
-                    return (_this.busy || _this.done || _this.paused) ? false : !!function () {
+                    return (this.busy || this.done || this.paused) ? false : !!function () {
+
                         return (this._offset() > this._offsetDocumentEnd(this._documentHeight())) ? this.fire(this.handler) : true;
                     }.bind(this)()
                 }
             };
 
             function get(id, instance_binding, instance_handler) {
-                return (!!id && !!instance.binding && !!instance_handler) ? function() {
-                    var results = instances.filter(function(obj) {
-                        return obj.id == id;
-                    });
-
+                var results = instances.filter(function(obj) {
+                    return obj.id == id;
+                });
+                return ((results.length && !!id) || (!!id && !!instance_binding && !!instance_handler) ? function() {
                     if (!results.length) {
 
                         var instance = new Infinite();
 
                         instance.id = !!id ? id : DEFAULT_ID + total_defaults;
 
+                        instance.bind(instance_binding);
+                        instance.handler = instance_handler;
                         total_defaults++;
 
                         instances.push(instance);
 
+                        instance._handler();
                         return instance;
                     } else {
-                        return results[id];
+                        return results[0];
                     }
-                }() : function () {
+                }() : !function () {
                     throw new InsufficientParameterException("infinite.get");
-                }();
+                }())
             }
 
             function InsufficientParameterException(value) {
