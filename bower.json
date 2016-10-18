@@ -1,7 +1,7 @@
 {
   "name": "infinite",
   "description": "A efficient infinite module for angular.js",
-  "main": "./src/infinite",
+  "main": "./src/infinite.js",
   "authors": [
     "Jesse Bowden"
   ],
