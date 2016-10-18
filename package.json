@@ -1,0 +1,22 @@
+{
+  "name": "infinite",
+  "version": "0.0.0",
+  "description": "A efficient infinite module for angular.js",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/jbowden1982/infinite.git"
+  },
+  "keywords": [
+    "angular"
+  ],
+  "author": "Jesse Bowden",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/jbowden1982/infinite/issues"
+  },
+  "homepage": "https://github.com/jbowden1982/infinite#readme"
+}
