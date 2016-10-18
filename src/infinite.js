@@ -98,7 +98,7 @@
                         return results[id];
                     }
                 }() : function () {
-                    throw new InsufficientParameterException("infinite.get")
+                    throw new InsufficientParameterException("infinite.get");
                 }();
             }
 
