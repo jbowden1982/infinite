@@ -22,6 +22,8 @@
 
                 handler: null,
 
+                call_handler: function () {this._handler();},
+
                 _offsetDocumentEnd: function(documentHeight) {
                     if (this.bound) {
                         return documentHeight - this.bound.offsetHeight - this.bound.scrollTop;
@@ -96,10 +98,8 @@
 
                         instances.push(instance);
 
-                        instance._handler();
                         return instance;
                     } else {
-                        results[0]._handler();
                         return results[0];
                     }
                 }() : !function (args) {
